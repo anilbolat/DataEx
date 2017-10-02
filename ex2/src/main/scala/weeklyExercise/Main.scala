@@ -19,12 +19,15 @@ object Main extends App {
 //  lines10.foreach(println)
 
   // Task #2: Compute how many lines there are in the articles
-  val nbrOfLines = 
+  val nbrOfLines = articlesRdd.count()
   println(f"#lines = ${nbrOfLines}%6s")
 
   // Task #3: What about the number of words
-  val words = ???
-  println(f"#words = ${words}%6s")
+  val words1 = articlesRdd.flatMap(_.split(" ")).count()
+  val words2 = articlesRdd.flatMap(a => a.split(" ")).count()
+  // same
+  println(f"#words = ${words1}%6s")
+  println(f"#words = ${words2}%6s")
   
   // Task #4: What is the number of chars?
   val chars = ???
