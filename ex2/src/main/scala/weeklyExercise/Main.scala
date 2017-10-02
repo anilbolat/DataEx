@@ -55,7 +55,7 @@ object Main extends App {
   // Pretend that 'nums' is a huge rdd of integers.
   val nums: RDD[Int] = sc.parallelize(List(2,3,4,5,6,7,8,9,10))
   
-  // You are given a factorization function:
+  // You are given a factorization function: // carpanlara ayırma...
   def factorization(number: Int, list: List[Int] = List()): List[Int] = {
     for(n <- 2 to number if (number % n == 0)) {
       return factorization(number / n, list :+ n)
@@ -64,16 +64,22 @@ object Main extends App {
   }                                              
 
   // Task #7: Compute an rdd containing all factors of all integers in 'nums'
-  val allPrimes = ???
-  
+  val allPrimes = nums.flatMap(factorization(_))
+
   // Task #8: Print all the values in allPrimes
-  
-  
+  allPrimes.foreach(print) // 232252372223325
+  allPrimes.collect.foreach(print) // 232252372223325
   
   // Bonus task:
   // Here is the code snippet which was already in the first exercises. Explain how it works.
   // You can use http://www.scala-lang.org/api/2.11.8/
-  val sheena = "sheena is a punk rocker she is a punk punk".split(" ").map(s => (s, 1)).groupBy(p => p._1).mapValues(v => v.length)
-  sheena.foreach(println)
+  val sheena1 = "sheena is a punk rocker she is a punk punk".split(" ")
+  sheena1.foreach(println) // sheena is a punk rocker she is a punk punk
+  val sheena2 = "sheena is a punk rocker she is a punk punk".split(" ").map(s => (s, 1))
+  sheena2.foreach(println) // (sheena,1) (is,1) (a,1) (punk,1) (rocker,1) (she,1) (is,1) (a,1) (punk,1) (punk,1)
+  val sheena3 = "sheena is a punk rocker she is a punk punk".split(" ").map(s => (s, 1)).groupBy(p => p._1)
+  sheena3.foreach(println)  // (sheena,[Lscala.Tuple2;@249e0271) (is,[Lscala.Tuple2;@4893b344)  (a,[Lscala.Tuple2;@53a665ad)  (she,[Lscala.Tuple2;@2c0b4c83)  (punk,[Lscala.Tuple2;@78525ef9)  (rocker,[Lscala.Tuple2;@2d0ecb24)
+  val sheena4 = "sheena is a punk rocker she is a punk punk".split(" ").map(s => (s, 1)).groupBy(p => p._1).mapValues(v => v.length)
+  sheena4.foreach(println) // (sheena,1) (is,2) (a,2) (she,1) (punk,3) (rocker,1)
   
 }
