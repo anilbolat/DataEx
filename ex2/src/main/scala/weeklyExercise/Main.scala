@@ -15,10 +15,11 @@ object Main extends App {
   
   
   // Task #1: How do you get the first 10 lines as an Array
-  val lines10 = ???
-  
+  val lines10 = articlesRdd.take(10)
+//  lines10.foreach(println)
+
   // Task #2: Compute how many lines there are in the articles
-  val nbrOfLines = ???
+  val nbrOfLines = 
   println(f"#lines = ${nbrOfLines}%6s")
 
   // Task #3: What about the number of words
