@@ -37,8 +37,10 @@ object Main extends App {
   println(f"#chars = ${chars2}%6s")
   
   // Task #5: How many time the word 'DisCo' appears in the corpus?
-  val disco = ???
-  println(f"#disco = ${disco}%6s")
+  val disco1 = articlesRdd.flatMap(_.split(" ")).filter(_=="DisCo").count()
+  val disco2 = articlesRdd.flatMap(r => r.split(" ")).filter(w => w == "DisCo").count()//use contains not
+  println(f"#disco = ${disco1}%6s")
+  println(f"#disco = ${disco2}%6s")
   
   // Task #6: How do you "remove" the lines having only word "DisCo". Can you do it without filter-function? 
   val noDisCoLines = ???
