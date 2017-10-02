@@ -20,31 +20,35 @@ object Main extends App {
 
   // Task #2: Compute how many lines there are in the articles
   val nbrOfLines = articlesRdd.count()
-  println(f"#lines = ${nbrOfLines}%6s")
+  //println(f"#lines = ${nbrOfLines}%6s")
 
   // Task #3: What about the number of words
   val words1 = articlesRdd.flatMap(_.split(" ")).count()
   val words2 = articlesRdd.flatMap(a => a.split(" ")).count()
   // same
-  println(f"#words = ${words1}%6s")
-  println(f"#words = ${words2}%6s")
+  //println(f"#words = ${words1}%6s")
+  //println(f"#words = ${words2}%6s")
   
   // Task #4: What is the number of chars?
   //val chars = articlesRdd.map(_.length) // calculates length of each line
   val chars1 = articlesRdd.map(_.length).reduce(_+_) // sums all of them
   val chars2 = articlesRdd.map(_.length).reduce((x,y) => (x+y)) // sums all of them
-  println(f"#chars = ${chars1}%6s")
-  println(f"#chars = ${chars2}%6s")
+  //println(f"#chars = ${chars1}%6s")
+  //println(f"#chars = ${chars2}%6s")
   
   // Task #5: How many time the word 'DisCo' appears in the corpus?
   val disco1 = articlesRdd.flatMap(_.split(" ")).filter(_=="DisCo").count()
   val disco2 = articlesRdd.flatMap(r => r.split(" ")).filter(w => w == "DisCo").count()//use contains not
-  println(f"#disco = ${disco1}%6s")
-  println(f"#disco = ${disco2}%6s")
+  //println(f"#disco = ${disco1}%6s")
+  //println(f"#disco = ${disco2}%6s")
   
   // Task #6: How do you "remove" the lines having only word "DisCo". Can you do it without filter-function? 
-  val noDisCoLines = ???
-    
+  val noDisCoLines1 = articlesRdd.filter(x => x != "DisCo")
+  println(f"#subtract = ${noDisCoLines1.count}%6s")
+
+  val keyWords = sc.parallelize(List("DisCo"))
+  val noDisCoLines2 = articlesRdd subtract keyWords
+  println(f"#subtract = ${noDisCoLines2.count}%6s")
 
   
   
