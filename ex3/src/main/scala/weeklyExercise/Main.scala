@@ -22,15 +22,17 @@ object Main extends App {
   
   
   // Task #1: transform the tupleRdd to a pair RDD, where key is the home team and value is the audience. 
-  val audienceByTeam: RDD[(String, Int)] = ???
-  
+  val audienceByTeam: RDD[(String, Int)] = tupleRdd.map(t => (t._2, t._6.toInt))
+  //audienceByTeam.collect.foreach(println)
+
   // Task #2: Compute the overall audience of the home games for each team
-  val totalAudience = ???
+  val totalAudience = audienceByTeam.reduceByKey((x,y) => (x+y))
+  //val totalAudience = audienceByTeam.reduceByKey(_+_) // same
   totalAudience.collect.foreach(println)
-  
+
   // Task #3: Compute the average audience of the home games for each team:
   val averageAudience = ???
-  averageAudience.collect.foreach(println)
+  //averageAudience.collect.foreach(println)
   
   
   // Task #4: File premierLeagueStadiums.csv has a list of the (English) Premier League stadiums in the form statdiumId,stadiumName and
@@ -41,7 +43,7 @@ object Main extends App {
   val premierLeagueClubsRaw = sc.textFile("src/main/resources/football/premierLeagueClubsWithStadiums.csv")
   
   val j = ???
-  j.collect.foreach(println)
+  //j.collect.foreach(println)
   
   // Task #5: File premierLeagueClubs.csv contains the list of current Premier League clubs and the file finns has the list of the
   // Finnish players who have played in some Premier League. The structure of the file is playerName,clubName.
@@ -49,7 +51,7 @@ object Main extends App {
   val premierLeagueClubsRaw2 = sc.textFile("src/main/resources/football/premierLeagueClubs.csv")
   val finnsRaw = sc.textFile("src/main/resources/football/finns.csv")
   val finnsInClubs = ???
-  finnsInClubs.collect.foreach(println)
+  //finnsInClubs.collect.foreach(println)
   
   
   // Bonus task #1: In football the winning team get three points and loosing one gets 0 points. In case of a draw match both teams get one point.
