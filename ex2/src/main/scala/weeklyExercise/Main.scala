@@ -30,8 +30,11 @@ object Main extends App {
   println(f"#words = ${words2}%6s")
   
   // Task #4: What is the number of chars?
-  val chars = ???
-  println(f"#chars = ${chars}%6s")
+  //val chars = articlesRdd.map(_.length) // calculates length of each line
+  val chars1 = articlesRdd.map(_.length).reduce(_+_) // sums all of them
+  val chars2 = articlesRdd.map(_.length).reduce((x,y) => (x+y)) // sums all of them
+  println(f"#chars = ${chars1}%6s")
+  println(f"#chars = ${chars2}%6s")
   
   // Task #5: How many time the word 'DisCo' appears in the corpus?
   val disco = ???
