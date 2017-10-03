@@ -31,13 +31,14 @@ object Main extends App {
   //totalAudience.collect.foreach(println)
 
   // Task #3: Compute the average audience of the home games for each team:
-  val averageAudience = tupleRdd.map(v => (v._2, (v._6.toInt, 1))).
+  val averageAudience = tupleRdd.map(v => (v._2, (v._6.toInt, 1))). // aralarında işlem yapmak için yanyana koydu!...
     reduceByKey((v1,v2) => ((v1._1+v2._1),(v1._2+v2._2))).mapValues(v => (v._1/v._2))
+    // mapvalues: value'lar arası işlem yaptı!...
+
   val countAudience = tupleRdd.map(t => (t._2, 1)).reduceByKey(_+_)
   averageAudience.collect.foreach(println)
   countAudience.collect.foreach(println)
-  
-  
+
   // Task #4: File premierLeagueStadiums.csv has a list of the (English) Premier League stadiums in the form statdiumId,stadiumName and
   // premierLeagueClubsWithStadiums.csv has the Premier League teams in the form clubName,stadionId.
   // Based on these produce a pair RDD, whose element are (stadiumName,clubName), where the club plays in the stadium.
