@@ -28,11 +28,14 @@ object Main extends App {
   // Task #2: Compute the overall audience of the home games for each team
   val totalAudience = audienceByTeam.reduceByKey((x,y) => (x+y))
   //val totalAudience = audienceByTeam.reduceByKey(_+_) // same
-  totalAudience.collect.foreach(println)
+  //totalAudience.collect.foreach(println)
 
   // Task #3: Compute the average audience of the home games for each team:
-  val averageAudience = ???
-  //averageAudience.collect.foreach(println)
+  val averageAudience = tupleRdd.map(v => (v._2, (v._6.toInt, 1))).
+    reduceByKey((v1,v2) => ((v1._1+v2._1),(v1._2+v2._2))).mapValues(v => (v._1/v._2))
+  val countAudience = tupleRdd.map(t => (t._2, 1)).reduceByKey(_+_)
+  averageAudience.collect.foreach(println)
+  countAudience.collect.foreach(println)
   
   
   // Task #4: File premierLeagueStadiums.csv has a list of the (English) Premier League stadiums in the form statdiumId,stadiumName and
