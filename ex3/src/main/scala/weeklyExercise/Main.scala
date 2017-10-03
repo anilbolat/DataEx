@@ -36,8 +36,8 @@ object Main extends App {
     // mapvalues: value'lar arası işlem yaptı!...
 
   val countAudience = tupleRdd.map(t => (t._2, 1)).reduceByKey(_+_)
-  averageAudience.collect.foreach(println)
-  countAudience.collect.foreach(println)
+  //averageAudience.collect.foreach(println)
+  //countAudience.collect.foreach(println)
 
   // Task #4: File premierLeagueStadiums.csv has a list of the (English) Premier League stadiums in the form statdiumId,stadiumName and
   // premierLeagueClubsWithStadiums.csv has the Premier League teams in the form clubName,stadionId.
@@ -46,8 +46,11 @@ object Main extends App {
   val premierLeagueStadiumsRaw = sc.textFile("src/main/resources/football/premierLeagueStadiums.csv")
   val premierLeagueClubsRaw = sc.textFile("src/main/resources/football/premierLeagueClubsWithStadiums.csv")
   
-  val j = ???
-  //j.collect.foreach(println)
+  val stadiums = premierLeagueStadiumsRaw.map(l => {val v = l.split(','); (v(0), v(1))}) // (id,name-std)
+  val clubs = premierLeagueClubsRaw.map(l => {val v = l.split(","); (v(1), v(0))}) // (id,name-club)
+  val j = stadiums.join(clubs) // (id, (name-std,name-club))
+    .map(v => v._2) // (name-st,name-club)
+  j.collect.foreach(println)
   
   // Task #5: File premierLeagueClubs.csv contains the list of current Premier League clubs and the file finns has the list of the
   // Finnish players who have played in some Premier League. The structure of the file is playerName,clubName.
