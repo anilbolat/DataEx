@@ -66,14 +66,24 @@ object Main extends App {
   val finns = finnsRaw.map(l => {val v = l.split(','); (v(1), v(0))})   // (name-club,name-player)
   val finnsInClubs = clubNames.leftOuterJoin(finns) // (A + (A n B)) kumeleme... // (name-club, (0,Some(name-player))) or (name-club, (0,None))
       .map(v => (v._1, v._2._2 match {case Some(n) => 1; case None => 0})).reduceByKey(_+_)
-//  finnsInClubs.collect.foreach(println)//.foreach(println)
+//  finnsInClubs.collect.foreach(println)
   
   // Bonus task #1: In football the winning team get three points and loosing one gets 0 points. In case of a draw match both teams get one point.
   // Transform tupleRdd to pair RDD of (team, points) for the matches:
-  val pointsPerMatch: RDD[(String, Int)] = ???
+  val pointsPerMatch: RDD[(String, Int)] = tupleRdd.flatMap(v => {if (v._4.toInt > v._5.toInt) Array((v._2,3),(v._3,0))
+                                                              else if (v._4.toInt < v._5.toInt)  Array((v._3,3),(v._2,0))
+                                                              else  Array((v._2,1),(v._3,1))
+  })
+  //pointsPerMatch.collect.foreach(print)
+
+  val pointsPerMatchOriginalSolution: RDD[(String, Int)] = tupleRdd.flatMap(t => {val d = t._4.toInt - t._5.toInt;
+    if (d>0) Array((t._2, 3), (t._3, 0))
+    else if (d == 0) Array((t._2, 1), (t._3, 1))
+    else Array((t._2, 0), (t._3, 3))})
+  //pointsPerMatchOriginalSolution.collect.foreach(print)
 
   // Bonus task #2: Compute the overall points for each team
-  val table: RDD[(String, Int)] = ???
+  val table: RDD[(String, Int)] = pointsPerMatch.reduceByKey(_+_)
   table.collect.foreach(println)
                                           
 }
