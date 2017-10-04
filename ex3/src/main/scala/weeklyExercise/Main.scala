@@ -50,16 +50,23 @@ object Main extends App {
   val clubs = premierLeagueClubsRaw.map(l => {val v = l.split(","); (v(1), v(0))}) // (id,name-club)
   val j = stadiums.join(clubs) // (id, (name-std,name-club))
     .map(v => v._2) // (name-st,name-club)
-  j.collect.foreach(println)
+  //j.collect.foreach(println)
   
   // Task #5: File premierLeagueClubs.csv contains the list of current Premier League clubs and the file finns has the list of the
   // Finnish players who have played in some Premier League. The structure of the file is playerName,clubName.
   // Use the two RDDs to compute a pair RDD, whose keys are the current club names and the values are the number of Finnish players played in the club.
-  val premierLeagueClubsRaw2 = sc.textFile("src/main/resources/football/premierLeagueClubs.csv")
-  val finnsRaw = sc.textFile("src/main/resources/football/finns.csv")
-  val finnsInClubs = ???
+  val premierLeagueClubsRaw2 = sc.textFile("src/main/resources/football/premierLeagueClubs.csv") // name-club
+  val finnsRaw = sc.textFile("src/main/resources/football/finns.csv") // name-player,name-club
+
+  //val finnsInClubs = finnsRaw.map(l => {val v = l.split(","); (v(1),1)}).  // (name-club,1)
+    //        reduceByKey(_+_)  // (name-club, num-of-finn-players)
   //finnsInClubs.collect.foreach(println)
-  
+
+  val clubNames = premierLeagueClubsRaw2.map(l => (l,0)) // (name-club,0)
+  val finns = finnsRaw.map(l => {val v = l.split(','); (v(1), v(0))})   // (name-club,name-player)
+  val finnsInClubs = clubNames.leftOuterJoin(finns) // (A + (A n B)) kumeleme... // (name-club, (0,Some(name-player))) or (name-club, (0,None))
+      .map(v => (v._1, v._2._2 match {case Some(n) => 1; case None => 0})).reduceByKey(_+_)
+//  finnsInClubs.collect.foreach(println)//.foreach(println)
   
   // Bonus task #1: In football the winning team get three points and loosing one gets 0 points. In case of a draw match both teams get one point.
   // Transform tupleRdd to pair RDD of (team, points) for the matches:
