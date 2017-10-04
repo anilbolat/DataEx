@@ -1,0 +1,74 @@
+object ex1 {
+  
+  // Task #1: Familiarise yourself with the Scala worksheet
+  def sum(i: Int, j: Int) = {
+  	i + j
+  }                                               //> sum: (i: Int, j: Int)Int
+  val s = sum(20, 21)                             //> s  : Int = 41
+  
+  
+  // Task #2: Recursive function
+	def sqrt(x: Double) = {
+
+		// Helper function abs
+		def abs(x: Double) = if(x<0.0) -x else x
+	
+		// Helper function isGoodEnough
+		def isGoodEnough(guess: Double) =  {
+			abs(guess * guess - x) / x <  0.001
+		}
+	
+		def improve(guess: Double) = {
+			(guess + x / guess) / 2
+		}
+	
+  	def sqrtIter(guess: Double, x: Double): Double = {
+  		if(isGoodEnough(guess)) guess
+  		else sqrtIter(improve(guess), x)}
+  
+  	sqrtIter(1, x)
+	}                                         //> sqrt: (x: Double)Double
+
+	sqrt(2)                                   //> res0: Double = 1.4142156862745097
+	sqrt(1e-6)                                //> res1: Double = 0.0010000001533016628
+	sqrt(1e60)                                //> res2: Double = 1.0000788456669446E30
+	
+	
+	// Task #3: Pascal's triangle
+	def pascal(c: Int, r: Int): Int = {
+      if(c < 0 || r < 0 ||  c > r) 0
+      else if(c == 0 || r == 0) 1
+      else pascal(c-1, r-1) + pascal(c, r-1)
+      
+  }                                               //> pascal: (c: Int, r: Int)Int
+  pascal(0,0)                                     //> res3: Int = 1
+  pascal(1,4)                                     //> res4: Int = 4
+  
+  
+  
+  // Task #4: Parsing
+  
+    def balance(chars: List[Char]): Boolean = {
+    
+  	    def foo(depth: Int, chars: List[Char]): Boolean = {
+    		if(chars.length == 0) depth == 0
+    		else {
+      		    val c = chars.head
+      		    val d = if (c == '(') 1
+  			    else if(c == ')') -1
+      			         else 0
+      		foo(depth + d, chars.tail)
+    	        }
+  	    }
+  	    foo(0, chars)
+	}                                         //> balance: (chars: List[Char])Boolean
+	
+	balance(List('a', '(', ')'))              //> res5: Boolean = true
+	
+	
+	// Task #5: Higher order functions 1
+	
+	val a = Array(1,2,3,4,5)                  //> a  : Array[Int] = Array(1, 2, 3, 4, 5)
+	a.map(v => v * v).reduce(_+_)             //> res6: Int = 55
+   
+}
